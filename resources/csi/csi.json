@@ -1,0 +1,29 @@
+[
+  {
+    "name": "List_CompanyScore",
+    "code": "SELECT A.id, A.createTime, A.companyId, A.score, A.scoreSurplus, A.scoreAfter, A.memo, B.name as companyName, A.scoreFrom, A.scoreType,A.scoreState as state, D.userName as adminName FROM company_score A JOIN company B ON B.id=A.companyId LEFT JOIN score_send_record C ON C.recordId=A.id LEFT JOIN system_admin D ON D.id=C.adminId WHERE 1=1[ AND (B.name like concat('%', @keyword, '%') or B.phone like concat('%', @keyword, '%'))][ AND A.scoreFrom =@scoreFrom][ AND A.createTime>=@startTime][ AND A.createTime<@endTime] ORDER BY A.createTime desc LIMIT @pageStart,@pageSize;",
+    "module": "business",
+    "resultSet": "M",
+    "queryOnly": true,
+    "requiredTransaction": false,
+    "middleWares": {
+      "pagination": {
+        "size": "pageSize",
+        "count": "totalCount",
+        "page": "pageIndex"
+      }
+    }
+  },
+  {
+    "name": "Get_Company_QueryTotal",
+    "code": {
+      "items": "SELECT * FROM api LIMIT 3",
+      "one": "SELECT * FROM api_definition WHERE id = 10"
+    },
+    "module": "business",
+    "resultSet": "M,S",
+    "queryOnly": true,
+    "requiredTransaction": false,
+    "middleWares": {}
+  }
+]

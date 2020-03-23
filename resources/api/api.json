@@ -1,0 +1,94 @@
+[
+  {
+    "version": "1.0.0",
+    "owner": "chengong",
+    "updatedTime": "2016-12-26T11:35:43",
+    "name": "CheckAPINames",
+    "module": "api",
+    "url": "defaultapi/check",
+    "useAbsoluteUrl": false,
+    "method": "POST",
+    "title": "查询API名称是否存在",
+    "summary": null,
+    "note": "为了检查生成默认接口提示使用",
+    "allowAnonymous": false,
+    "cache": {
+      "enabled": false,
+      "type": "redis",
+      "expiration": 300
+    },
+    "implemented": true,
+    "implementation": {
+      "type": "repository",
+      "name": "DefaultApiRepository.CheckExistName"
+    },
+    "parameter": {
+      "query": [],
+      "body": [
+        {
+          "type": "object",
+          "name": "apiData"
+        }
+      ]
+    },
+    "result": {
+      "type": "json",
+      "schema": [
+        {
+          "name": "statusCode",
+          "type": "int",
+          "nullable": false,
+          "description": "错误码（默认为200，无错误信息）"
+        },
+        {
+          "name": "errorMessage",
+          "type": "string",
+          "nullable": true,
+          "description": "错误信息"
+        },
+        {
+          "name": "data",
+          "type": "object",
+          "nullable": true,
+          "description": "接口信息数据集",
+          "schema": [
+            {
+              "name": "count",
+              "type": "int",
+              "nullable": true,
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    "mock": [
+      {
+        "input": {
+          "projectId": "*",
+          "name": "*",
+          "code": "*",
+          "rawCode": "*",
+          "resultSet": "*",
+          "queryOnly": "*",
+          "requiredTransaction": "*",
+          "middleWares": "*",
+          "createdBy": "*",
+          "createdByName": "*",
+          "updatedBy": "*",
+          "updatedByName": "*",
+          "updatedTime": "*",
+          "module": "*",
+          "moduleId": "*"
+        },
+        "output": {
+          "statusCode": 200,
+          "errorMessage": "",
+          "data": {
+            "id": ""
+          }
+        }
+      }
+    ]
+  }
+]
