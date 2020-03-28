@@ -4,15 +4,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dawsonliu/godbr/repository"
 	"github.com/gin-gonic/gin"
 )
 
 func ExecuteApi(c *gin.Context) (interface{}, error) {
 	param, err := ExtractParams(c)
 	if err == nil {
-		result, ok := repository.Invoke("sql", param)
-		return result, ok
+		// result, ok := repository.Invoke("sql", param)
+		return param, nil
 	}
 	return nil, err
 }
@@ -21,10 +20,7 @@ func DBRRequestHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//t := time.Now()
 
-		// Set example variable
-		c.Set("example", "12345")
-
-		if strings.Contains(strings.ToLower(c.Request.URL.Path), strings.ToLower("/query")) {
+		if strings.Contains(strings.ToLower(c.Request.URL.Path), strings.ToLower("/api")) {
 			result, err := ExecuteApi(c)
 			if err != nil {
 				c.JSON(200, gin.H{

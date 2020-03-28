@@ -1,0 +1,45 @@
+### 1 ListModulesByProjectName
+GET http://localhost:8080/api/modules?projectName=Wicture.DbRESTFul.PMT&a=123 HTTP/1.1
+
+### 2.1 SyncCsis
+POST http://localhost:8080/api/devtool/csi/sync?projectId=1 HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjEiLCJOYW1lIjoiZGF3c29uIiwianRpIjoiZGQyOGM0YWItMmY3OC00YTExLWJhZmItYTVjMjdiNDkwOTliIiwiaWF0IjoxNTgyOTI1NTgzMTUyLCJSb2xlIjoiQWRtaW4iLCJBbGlhcyI6IkRhd3NvbiBMaXUiLCJuYmYiOjE1ODI5NTQzODMsImV4cCI6MTU4MzU1OTE4MywiaXNzIjoiV2ljdHVyZSIsImF1ZCI6IkRiUkVTVEZ1bEFwaSJ9.OQpiWSXyDjeSIaM-em22bAcPQdVszOofIGWvqKY16nE
+
+{
+    "apiId": 1,
+    "name": "4d2cb94c",
+    "description": "llep6hyt",
+    "purpose": "Debug",
+    "parameters": "gsdomdzi",
+    "expectResult": "k5epcler"
+}
+
+### 2.1 SyncCsis
+POST http://localhost:8080/api/devtool/csi/sync?projectId=1 HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjEiLCJOYW1lIjoiZGF3c29uIiwianRpIjoiZGQyOGM0YWItMmY3OC00YTExLWJhZmItYTVjMjdiNDkwOTliIiwiaWF0IjoxNTgyOTI1NTgzMTUyLCJSb2xlIjoiQWRtaW4iLCJBbGlhcyI6IkRhd3NvbiBMaXUiLCJuYmYiOjE1ODI5NTQzODMsImV4cCI6MTU4MzU1OTE4MywiaXNzIjoiV2ljdHVyZSIsImF1ZCI6IkRiUkVTVEZ1bEFwaSJ9.OQpiWSXyDjeSIaM-em22bAcPQdVszOofIGWvqKY16nE
+
+[{
+    "apiId": 1,
+    "name": "Dawson",
+    "description": false
+},{
+    "apiId": 2,
+    "name": "Ricky",
+    "description": true
+}]
+
+### 2. UpdateTestCase
+PUT http://localhost:5000/api/test/case/update HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjEiLCJOYW1lIjoiZGF3c29uIiwianRpIjoiZGQyOGM0YWItMmY3OC00YTExLWJhZmItYTVjMjdiNDkwOTliIiwiaWF0IjoxNTgyOTI1NTgzMTUyLCJSb2xlIjoiQWRtaW4iLCJBbGlhcyI6IkRhd3NvbiBMaXUiLCJuYmYiOjE1ODI5NTQzODMsImV4cCI6MTU4MzU1OTE4MywiaXNzIjoiV2ljdHVyZSIsImF1ZCI6IkRiUkVTVEZ1bEFwaSJ9.OQpiWSXyDjeSIaM-em22bAcPQdVszOofIGWvqKY16nE
+
+{
+    "id": 1,
+    "name": "测试接口用例",
+    "description": "测试接口用例",
+    "purpose": "Test",
+    "parameters": "{}",
+    "expectResult": "{}"
+}

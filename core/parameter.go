@@ -30,7 +30,7 @@ type BodyParams struct {
 	BodyType BodyType
 	RawText  string
 	Files    map[string][]*multipart.FileHeader
-	BodyMap  map[string][]string
+	BodyMap  interface{}
 }
 
 func (ap *ApiParams) GetMap() map[string]string {
@@ -43,8 +43,12 @@ func (ap *ApiParams) GetMap() map[string]string {
 	}
 
 	if ap.BodyParams.BodyMap != nil {
-		for key, q := range ap.BodyParams.BodyMap {
-			result[key] = strings.Join(q, ", ")
+		switch ap.BodyParams.BodyMap.(type) {
+		case map[string][]string:
+			mapData := ap.BodyParams.BodyMap.(map[string][]string)
+			for key, q := range mapData {
+				result[key] = strings.Join(q, ", ")
+			}
 		}
 	}
 
@@ -64,20 +68,18 @@ func ExtractParams(c *gin.Context) (ApiParams, error) {
 	}
 
 	result.BodyParams = BodyParams{}
-	if b, e := ioutil.ReadAll(c.Request.Body); e == nil {
+	if b, e := ioutil.ReadAll(c.Request.Body); e == nil && len(b) > 0 {
 		result.BodyParams.RawText = string(b)
 		result.BodyParams.BodyType = Json
 
 		if len(strings.TrimSpace(result.BodyParams.RawText)) > 0 {
-			if json.Unmarshal(b, result.BodyParams.BodyMap) != nil {
-				log.Info("failed to parse from json")
+			if err := json.Unmarshal(b, &result.BodyParams.BodyMap); err != nil {
+				log.Info("failed to parse from json" + err.Error())
 			}
 		}
-	} else {
-		return result, e
 	}
 
-	if len(c.Request.MultipartForm.File) > 0 {
+	if c.Request.MultipartForm != nil && len(c.Request.MultipartForm.File) > 0 {
 		result.BodyParams.BodyType = Files
 		result.BodyParams.Files = c.Request.MultipartForm.File
 	}
