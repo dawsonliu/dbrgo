@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"encoding/json"
@@ -56,7 +56,7 @@ func (ap *ApiParams) Parse(dest *interface{}) error {
 	return mapstructure.Decode(param, dest)
 }
 
-func Extract(c *gin.Context) (ApiParams, error) {
+func ExtractParams(c *gin.Context) (ApiParams, error) {
 	result := ApiParams{}
 
 	if len(c.Request.URL.Query()) > 0 {

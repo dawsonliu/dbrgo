@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/dawsonliu/dbrgo/repository"
+	"github.com/dawsonliu/godbr/core"
+	"github.com/dawsonliu/godbr/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -14,8 +15,8 @@ var db *gorm.DB
 func main() {
 	//LoadApis()
 
-	LoadCsis()
-	Start()
+	core.LoadCsis()
+	core.Start()
 }
 
 func serve() {

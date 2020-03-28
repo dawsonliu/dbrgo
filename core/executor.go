@@ -1,17 +1,17 @@
-package main
+package core
 
 import (
 	"strings"
 	"time"
 
-	"github.com/dawsonliu/dbr/repository"
+	"github.com/dawsonliu/godbr/repository"
 	"github.com/gin-gonic/gin"
 )
 
 func ExecuteApi(c *gin.Context) (interface{}, error) {
-	sql, err := Extract(c)
+	param, err := ExtractParams(c)
 	if err == nil {
-		result, ok := repository.Invoke(sql.(string))
+		result, ok := repository.Invoke("sql", param)
 		return result, ok
 	}
 	return nil, err
