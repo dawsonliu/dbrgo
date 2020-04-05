@@ -27,10 +27,10 @@ type ApiParams struct {
 }
 
 type BodyParams struct {
-	BodyType BodyType
-	RawText  string
-	Files    map[string][]*multipart.FileHeader
-	BodyMap  interface{}
+	BodyType    BodyType
+	RawJsonText string
+	Files       map[string][]*multipart.FileHeader
+	BodyMap     interface{}
 }
 
 func (ap *ApiParams) GetMap() map[string]string {
@@ -55,6 +55,19 @@ func (ap *ApiParams) GetMap() map[string]string {
 	return result
 }
 
+func (ap *ApiParams) GetJson() interface{} {
+	if len(ap.BodyParams.RawJsonText) <= 0 {
+		return nil
+	}
+
+	var result interface{}
+	if err := json.Unmarshal([]byte(ap.BodyParams.RawJsonText), &result); err != nil {
+		log.Info("failed to parse from json" + err.Error())
+	}
+
+	return result
+}
+
 func (ap *ApiParams) Parse(dest *interface{}) error {
 	param := ap.GetMap()
 	return mapstructure.Decode(param, dest)
@@ -69,10 +82,10 @@ func ExtractParams(c *gin.Context) (ApiParams, error) {
 
 	result.BodyParams = BodyParams{}
 	if b, e := ioutil.ReadAll(c.Request.Body); e == nil && len(b) > 0 {
-		result.BodyParams.RawText = string(b)
+		result.BodyParams.RawJsonText = string(b)
 		result.BodyParams.BodyType = Json
 
-		if len(strings.TrimSpace(result.BodyParams.RawText)) > 0 {
+		if len(strings.TrimSpace(result.BodyParams.RawJsonText)) > 0 {
 			if err := json.Unmarshal(b, &result.BodyParams.BodyMap); err != nil {
 				log.Info("failed to parse from json" + err.Error())
 			}

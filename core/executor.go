@@ -11,6 +11,11 @@ func ExecuteApi(c *gin.Context) (interface{}, error) {
 	param, err := ExtractParams(c)
 	if err == nil {
 		// result, ok := repository.Invoke("sql", param)
+
+		if param.BodyParams.BodyType == Json {
+			return param.GetJson(), nil
+		}
+
 		return param, nil
 	}
 	return nil, err
@@ -66,5 +71,5 @@ func Start() {
 		})
 	})
 
-	r.Run(":8080")
+	r.Run(":8000")
 }
