@@ -5,14 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 )
-
-type ApiData struct {
-	APIId       int    `json:"apiId"`
-	Description bool   `json:"description"`
-	Name        string `json:"name"`
-}
 
 func ExecuteApi(c *gin.Context) (interface{}, error) {
 	param, err := ExtractParams(c)
@@ -20,17 +13,7 @@ func ExecuteApi(c *gin.Context) (interface{}, error) {
 		// result, ok := repository.Invoke("sql", param)
 
 		if param.BodyParams.BodyType == Json {
-			// if jobj, err := param.Json(); err == nil {
-			// 	log.Info("Json param: ", jobj)
-
-			// 	return jobj, nil
-			// }
-			items := []ApiData{}
-			if err := param.JsonTo(&items); err == nil {
-				log.Info("Json param: ", items)
-
-				return items, nil
-			}
+			return param.GetJson(), nil
 		}
 
 		return param, nil
@@ -88,5 +71,5 @@ func Start() {
 		})
 	})
 
-	r.Run(":8080")
+	r.Run(":8000")
 }

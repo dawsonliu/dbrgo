@@ -27,31 +27,10 @@ type ApiParams struct {
 }
 
 type BodyParams struct {
-	BodyType    BodyType // Body中数据类型
-	rawJsonText string   // 如果是Json类型，则存储json字符串，需要的时候可以通过 `Json()` 和 `JsonTo(interface{})` 获取
+	BodyType    BodyType
+	RawJsonText string
 	Files       map[string][]*multipart.FileHeader
 	BodyMap     interface{}
-}
-
-func (ap *ApiParams) Json() (interface{}, error) {
-	result := new(interface{})
-
-	if err := json.Unmarshal([]byte(ap.BodyParams.rawJsonText), &result); err != nil {
-		log.Info("failed to parse from json" + err.Error())
-		return nil, err
-	}
-
-	return result, nil
-}
-
-// 将Json序列化成指定的强类型 (Struct)
-func (ap *ApiParams) JsonTo(data interface{}) error {
-	if err := json.Unmarshal([]byte(ap.BodyParams.rawJsonText), &data); err != nil {
-		log.Info("failed to parse from json" + err.Error())
-		return err
-	}
-
-	return nil
 }
 
 func (ap *ApiParams) GetMap() map[string]string {
@@ -76,6 +55,19 @@ func (ap *ApiParams) GetMap() map[string]string {
 	return result
 }
 
+func (ap *ApiParams) GetJson() interface{} {
+	if len(ap.BodyParams.RawJsonText) <= 0 {
+		return nil
+	}
+
+	var result interface{}
+	if err := json.Unmarshal([]byte(ap.BodyParams.RawJsonText), &result); err != nil {
+		log.Info("failed to parse from json" + err.Error())
+	}
+
+	return result
+}
+
 func (ap *ApiParams) Parse(dest *interface{}) error {
 	param := ap.GetMap()
 	return mapstructure.Decode(param, dest)
@@ -90,8 +82,14 @@ func ExtractParams(c *gin.Context) (ApiParams, error) {
 
 	result.BodyParams = BodyParams{}
 	if b, e := ioutil.ReadAll(c.Request.Body); e == nil && len(b) > 0 {
-		result.BodyParams.rawJsonText = string(b)
+		result.BodyParams.RawJsonText = string(b)
 		result.BodyParams.BodyType = Json
+
+		if len(strings.TrimSpace(result.BodyParams.RawJsonText)) > 0 {
+			if err := json.Unmarshal(b, &result.BodyParams.BodyMap); err != nil {
+				log.Info("failed to parse from json" + err.Error())
+			}
+		}
 	}
 
 	if c.Request.MultipartForm != nil && len(c.Request.MultipartForm.File) > 0 {
