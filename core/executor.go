@@ -28,17 +28,9 @@ func DBRRequestHandler() gin.HandlerFunc {
 		if strings.Contains(strings.ToLower(c.Request.URL.Path), strings.ToLower("/api")) {
 			result, err := ExecuteApi(c)
 			if err != nil {
-				c.JSON(200, gin.H{
-					"statusCode":   500,
-					"errorMessage": err.Error(),
-					"data":         nil,
-				})
+				c.JSON(200, SetDefaultError(err.Error()))
 			} else {
-				c.JSON(200, gin.H{
-					"statusCode":   200,
-					"errorMessage": nil,
-					"data":         result,
-				})
+				c.JSON(200, SetResult(result))
 			}
 		} else {
 			c.Next()

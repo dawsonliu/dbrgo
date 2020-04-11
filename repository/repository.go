@@ -9,6 +9,10 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type Repository interface {
+	Invoke(csiName string, data interface{}, db *sql.DB, transaction *sql.Tx) (interface{}, error)
+}
+
 // func QuerySql(sql string) ([]map[string]interface{}, error) {
 // 	conn, _ := dbr.Open("mysql", "dbrpmt:DbRESTFu1-pmt@(db.91qpzs.net:3326)/pmt?charset=utf8&parseTime=True&loc=Local", nil)
 // 	conn.SetMaxOpenonns(10)
@@ -27,7 +31,7 @@ import (
 // }
 
 func Invoke(query string, args ...interface{}) (interface{}, error) {
-	db, err := sql.Open("mysql", "dbrpmt:DbRESTFu1-pmt@(db.91qpzs.net:3326)/pmt?charset=utf8&parseTime=True&loc=Local")
+	db, err := GetConnection(false)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -70,6 +74,7 @@ func Invoke(query string, args ...interface{}) (interface{}, error) {
 	return objects, err
 }
 
+// read row to data
 func read(data interface{}, row map[string]interface{}, column *sql.ColumnType) error {
 	columnName := column.Name()
 	dbType := column.DatabaseTypeName()
